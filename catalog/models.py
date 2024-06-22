@@ -30,9 +30,14 @@ class Product(models.Model):
         verbose_name='Цена товара',
         help_text='Введите цену товара'
     )
+    view_counter = models.PositiveIntegerField(
+        verbose_name='Количество просмотров',
+        help_text='Установите количество просмотров',
+        default=0
+    )
 
     def __str__(self):
-        return self.name, self.title, self.picture, self.category, self.cost
+        return self.name, self.title, self.picture, self.category, self.cost, self.view_counter
 
 class Category(models.Model):
     name = models.CharField(
