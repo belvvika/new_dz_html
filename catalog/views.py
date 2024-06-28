@@ -10,10 +10,10 @@ from catalog.models import Product
 # Create your views here.
 
 def index(request):
-    return render(request, 'catalog/index.html')
+    return render(request, 'products/index.html')
 
 def home(request):
-    return render(request, 'catalog/home.html')
+    return render(request, 'products/home.html')
 
 class ProductListView(ListView):
     model = Product
