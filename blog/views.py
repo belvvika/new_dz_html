@@ -7,7 +7,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 
 # Create your views here.
-
+def blog_new(request):
+    return render(request, 'blog/blog_new.html')
 class BlogListView(ListView):
     model = Blog
 
@@ -21,16 +22,16 @@ class BlogDetailView(DetailView):
 
 class BlogCreateView(CreateView):
     model = Blog
-    fields = ('title', 'slug', 'preview_picture', 'date_created', 'published_sign', 'views_counter')
-    success_url = reverse_lazy('catalog:products_list')
+    fields = ('title', 'slug', 'preview_picture', 'published_sign', 'views_counter')
+    success_url = reverse_lazy('blog:blog_list')
 
 class BlogUpdateView(UpdateView):
     model = Blog
-    fields = ('title', 'slug', 'preview_picture', 'date_created', 'published_sign', 'views_counter')
-    success_url = reverse_lazy('catalog:products_list')
+    fields = ('title', 'slug', 'preview_picture', 'published_sign', 'views_counter')
+    success_url = reverse_lazy('blog:blog_list')
 
     def get_success_url(self):
-        return reverse('catalog:product_detail', args=[self.kwargs.get('pk')])
+        return reverse('blog:blog_detail', args=[self.kwargs.get('pk')])
 class BlogDeleteView(DeleteView):
     model = Blog
-    success_url = reverse_lazy('catalog:products_list')
+    success_url = reverse_lazy('blog:blog_list')
