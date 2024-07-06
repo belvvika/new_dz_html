@@ -4,17 +4,17 @@
 <div class="album py-5 bg-body-tertiary">
     <div class="container">
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        {% for product in object_list %}
+        {% for blogs in object_list %}
         <div class="col">
           <div class="card shadow-sm">
-            <img src="{{ product.photo | media_filter }}">
+            <img src="{{ blogs.photo | media_filter }}">
             <div class="card-body">
-              <p class="card-text">{{ product.name }}</p>
+              <p class="card-text">{{ blogs.name }}</p>
               <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                  <a class="btn btn-primary" href="{% url 'products: product_detail' product.pk %}" role="button">Посмотреть</a>
-                  <a class="btn btn-primary" href="{% url 'products: product_update' product.pk %}" role="button">Редактировать</a>
-                  <a class="btn btn-primary" href="{% url 'products: product_delete' product.pk %}" role="button">Удалить</a>
+                  <a class="btn btn-primary" href="{% url 'blog:blog_detail' blogs.pk %}" role="button">Посмотреть</a>
+                  <a class="btn btn-primary" href="{% url 'blog:blog_update' blogs.pk %}" role="button">Редактировать</a>
+                  <a class="btn btn-primary" href="{% url 'blog:blog_delete' blogs.pk %}" role="button">Удалить</a>
                 </div>
                 <small class="text-body-secondary">9 mins</small>
               </div>
