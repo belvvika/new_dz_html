@@ -49,3 +49,33 @@ class Category(models.Model):
     def __str__(self):
         return self.name, self.title
 
+class Version(models.Model):
+    product_version = models.ForeignKey(
+        related_name='version',
+        to='Product',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name='Продукт',
+    )
+    name_product = models.CharField(
+        max_length=100,
+        verbose_name='Наименование товара',
+        help_text='Введите наименование товара'
+    )
+    number_version = models.IntegerField(
+        verbose_name='Описание',
+        help_text='Введите номер версии'
+    )
+    name_version = models.CharField(
+            max_length=100,
+            verbose_name='Наименование версии',
+            help_text='Введите наименование версии'
+    )
+    version_indicator = models.BooleanField(
+        verbose_name='Индикатор версии',
+        help_text='Отметьте, если версия актуальна'
+    )
+    def __str__(self):
+        return self.product_version, self.name_product, self.number_version, self.name_version, self.version_indicator
+

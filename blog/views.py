@@ -1,8 +1,10 @@
 
 from django.shortcuts import render, get_object_or_404
-
 from django.urls import reverse_lazy, reverse
+from django.forms import inlineformset_factory
+
 from blog.models import Blog
+from blog.forms import BlogForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 
@@ -22,16 +24,17 @@ class BlogDetailView(DetailView):
 
 class BlogCreateView(CreateView):
     model = Blog
-    fields = ('title', 'slug', 'preview_picture', 'published_sign', 'views_counter')
+    form_class = BlogForm
     success_url = reverse_lazy('blog:blog_list')
 
 class BlogUpdateView(UpdateView):
     model = Blog
-    fields = ('title', 'slug', 'preview_picture', 'published_sign', 'views_counter')
+    form_class = BlogForm
     success_url = reverse_lazy('blog:blog_list')
 
     def get_success_url(self):
         return reverse('blog:blog_detail', args=[self.kwargs.get('pk')])
+
 class BlogDeleteView(DeleteView):
     model = Blog
     success_url = reverse_lazy('blog:blog_list')
