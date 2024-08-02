@@ -37,6 +37,7 @@ class ProductUpdateView(UpdateView):
     success_url = reverse_lazy('products:products_list')
 
     def get_context_data(self, **kwargs):
+        ''' Метод для вывода формы версии при редактировании продукта '''
         context_data = super().get_context_data(**kwargs)
         ProductFormset = inlineformset_factory(Product, Version, VersionForm, extra=1)
         if self.request.method =='POST':
@@ -46,6 +47,7 @@ class ProductUpdateView(UpdateView):
         return context_data
 
     def form_valid(self, form):
+        ''' Метод для сохранения формы при редоктировании '''
         context_data = self.get_context_data()
         formset = context_data['formset']
         if form.is_valid() and formset.is_valid():
