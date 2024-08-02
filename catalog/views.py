@@ -1,5 +1,5 @@
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse_lazy, reverse
+from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.forms import inlineformset_factory
 
 from catalog.models import Product, Version
@@ -17,6 +17,17 @@ def home(request):
 
 class ProductListView(ListView):
     model = Product
+    def get_context_data(self, **kwargs):
+        """Метод для вывода названия версии если она активна"""
+        context_data = super().get_context_data(**kwargs)
+        version_dict = {}
+        for product in Product.objects.all():
+            for version in Version.objects.all():
+                if version.indicates_current_version:
+                    if version.product_id == int(product.pk):
+                        version_dict[version.product_id] = version.version_name
+        context_data['versions'] = version_dict
+        return context_data
 
 class ProductDetailView(DetailView):
     model = Product
