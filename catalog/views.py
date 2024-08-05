@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.forms import inlineformset_factory
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from catalog.models import Product, Version
 from catalog.forms import ProductForm, VersionForm
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
 
 # Create your views here.
@@ -18,7 +19,6 @@ def home(request):
 class ProductListView(ListView):
     model = Product
     def get_context_data(self, **kwargs):
-        """Метод для вывода названия версии если она активна"""
         context_data = super().get_context_data(**kwargs)
         version_dict = {}
         for product in Product.objects.all():
@@ -37,18 +37,30 @@ class ProductDetailView(DetailView):
         self.object.save()
         return self.object
 
-class ProductCreateView(CreateView):
+class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('products:products_list')
+
+    login_url = '/users/login/'
+    redirect_field_name = '/'
+
+    def form_valid(self, form):
+        product = form.save()
+        user = self.request.user
+        product.author = user
+        product.save()
+        return super().form_valid(form)
 
 class ProductUpdateView(UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('products:products_list')
 
+    login_url = '/users/login/'
+    redirect_field_name = '/'
+
     def get_context_data(self, **kwargs):
-        ''' Метод для вывода формы версии при редактировании продукта '''
         context_data = super().get_context_data(**kwargs)
         ProductFormset = inlineformset_factory(Product, Version, VersionForm, extra=1)
         if self.request.method =='POST':
@@ -58,7 +70,6 @@ class ProductUpdateView(UpdateView):
         return context_data
 
     def form_valid(self, form):
-        ''' Метод для сохранения формы при редоктировании '''
         context_data = self.get_context_data()
         formset = context_data['formset']
         if form.is_valid() and formset.is_valid():
@@ -72,3 +83,17 @@ class ProductUpdateView(UpdateView):
 class ProductDeleteView(DeleteView):
     model = Product
     success_url = reverse_lazy('products:products_list')
+
+    login_url = '/users/login/'
+    redirect_field_name = '/'
+
+    class ContactsTemplateView(TemplateView):
+        template_name = 'contacts.html'
+
+        def post(self, request):
+            if request.method == 'POST':
+                name = request.POST.get('name')
+                phone = request.POST.get('phone')
+                message = request.POST.get('message')
+                print(f'Имя -{name}, телефон - {phone}, сообщение - {message}')
+            return render(request, 'contacts.html')
