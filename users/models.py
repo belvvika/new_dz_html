@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+
 # Create your models here.
 
 class User(AbstractUser):
@@ -28,6 +29,13 @@ class User(AbstractUser):
         blank=True,
         null=True,
         help_text='Введите страну'
+    )
+    token = models.CharField(
+        max_length=100,
+        verbose_name='Токен',
+        blank=True,
+        null=True,
+        help_text='Токен для подтверждения почты'
     )
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

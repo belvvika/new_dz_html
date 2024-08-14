@@ -1,5 +1,6 @@
 from django.db import models
 
+from users.models import User
 # Create your models here.
 
 class Product(models.Model):
@@ -75,6 +76,14 @@ class Version(models.Model):
     version_indicator = models.BooleanField(
         verbose_name='Индикатор версии',
         help_text='Отметьте, если версия актуальна'
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        verbose_name='Автор',
+        null=True,
+        blank=True,
+        related_name='users'
     )
     def __str__(self):
         return self.product_version, self.name_product, self.number_version, self.name_version, self.version_indicator

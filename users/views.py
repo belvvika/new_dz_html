@@ -1,6 +1,5 @@
 import random
 import string
-
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
@@ -11,6 +10,7 @@ from users.models import User
 
 import secrets
 
+from config.settings import EMAIL_HOST_USER
 
 # Create your views here.
 class UserCreateView(CreateView):
@@ -26,11 +26,12 @@ class UserCreateView(CreateView):
         user.save()
         host = self.request.get_host()
         url = f'http://{host}/user/email-confirm/{token}/'
-
-        send_mail(subject='Подтверждение почты',
-                  message=f'Здравствуйте, чтобы подтвердить свою почту перейдите по ссылке {url}',
-                  from_email=mail,
-                  recipient_list=[user.email],)
+        send_mail(
+            subject='Подтверждение почты',
+            message=f'Здравствуйте, чтобы подтвердить свою почту перейдите по ссылке {url}',
+            from_email=EMAIL_HOST_USER,
+            recipient_list=[user.email]
+        )
         return super().form_valid(form)
 
 
@@ -62,7 +63,7 @@ class ResetTemplateView(TemplateView):
             host = self.request.get_host()
             send_mail(subject=f'Изменение пароля от почты {email}',
                       message=f'Здравствуйте, ваш новый пароль - {new_password}',
-                      from_email=mail,
+                      from_email=EMAIL_HOST_USER,
                       recipient_list=[email], )
         return render(request, 'contacts.html')
 

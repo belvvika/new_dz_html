@@ -1,7 +1,7 @@
 
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from users.models import User
-
+from django.forms import BooleanField
 class StyleFormMixin:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
