@@ -6,7 +6,7 @@ from django.core.exceptions import PermissionDenied
 
 from catalog.models import Product, Version
 from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 
 # Create your views here.
@@ -20,9 +20,6 @@ def home(request):
 class ProductListView(ListView):
     model = Product
 
-    login_url = '/users/login/'
-    redirect_field_name = '/'
-
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         version_dict = {}
@@ -35,11 +32,8 @@ class ProductListView(ListView):
         return context_data
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
-
-    login_url = '/users/login/'
-    redirect_field_name = '/'
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
@@ -63,7 +57,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
         product.save()
         return super().form_valid(form)
 
-class ProductUpdateView(UpdateView):
+class ProductUpdateView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('products:products_list')
@@ -98,7 +92,7 @@ class ProductUpdateView(UpdateView):
             return ProductModeratorForm
         raise PermissionDenied
 
-class ProductDeleteView(DeleteView):
+class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     success_url = reverse_lazy('products:products_list')
 
