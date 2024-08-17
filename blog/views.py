@@ -2,11 +2,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.forms import inlineformset_factory
-
 from blog.models import Blog
 from blog.forms import BlogForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
 
 # Create your views here.
 def blog_new(request):

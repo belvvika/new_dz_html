@@ -31,6 +31,21 @@ class Product(models.Model):
         verbose_name='Цена товара',
         help_text='Введите цену товара'
     )
+    published_sign = models.BooleanField(
+        default=False,
+        verbose_name='Опубликовано',
+        help_text='Опубликовать запись'
+    )
+
+    class Meta:
+        verbose_name = 'Товар',
+        verbose_name_plural = 'Товары',
+        ordering = ['name', 'category']
+        permissions = [
+            ('can_cancel_publication_product', 'Can cancel publication of a product'),
+            ('can_change_title_any_product', 'Can change the title of any product'),
+            ('can_change_category_any_product', 'Can change the category of any product')
+        ]
 
     def __str__(self):
         return self.name, self.title, self.picture, self.category, self.cost
@@ -84,6 +99,7 @@ class Version(models.Model):
         verbose_name='Индикатор версии',
         help_text='Отметьте, если версия актуальна'
     )
+
     def __str__(self):
         return self.product_version, self.name_product, self.number_version, self.name_version, self.version_indicator
 
