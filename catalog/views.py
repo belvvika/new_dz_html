@@ -7,7 +7,7 @@ from django.core.exceptions import PermissionDenied
 from catalog.models import Product, Version
 from catalog.forms import ProductForm, VersionForm, ProductModeratorForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
+from catalog.services import get_categories_from_cache
 
 # Create your views here.
 
@@ -31,6 +31,8 @@ class ProductListView(ListView):
         context_data['versions'] = version_dict
         return context_data
 
+    def get_queryset(self):
+        return get_categories_from_cache()
 
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
